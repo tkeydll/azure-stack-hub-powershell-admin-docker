@@ -17,8 +17,8 @@ RUN Set-AzEnvironment -Name $environment_name
 
 # Set your tenant name.
 RUN $AuthEndpoint = (Get-AzEnvironment -Name $environment_name).ActiveDirectoryAuthority.TrimEnd('/')
-RUN $AADTenantName = $your_tenant_name
-RUN $TenantId = (invoke-restmethod "$($AuthEndpoint)/$($AADTenantName)/.well-known/openid-configuration").issuer.TrimEnd('/').Split('/')[-1]
+RUN $AADTenantName = $tenant_name
+RUN $TenantId = (Invoke-RestMethod "$($AuthEndpoint)/$($AADTenantName)/.well-known/openid-configuration").issuer.TrimEnd('/').Split('/')[-1]
 
 
 #Connect-AzAccount -EnvironmentName "AzureStackAdmin" -TenantId $TenantId -UseDeviceAuthentication
