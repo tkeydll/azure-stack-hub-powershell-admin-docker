@@ -8,7 +8,7 @@ ARG tenant_name=your_tenant_name
 
 # Add cacert.
 WORKDIR /usr/local/share/ca-certificates
-RUN wget -O azurestackhub.crt ${ca_cert_url}
+RUN Invoke-WebRequest -Uri $ca_cert_url -OutFile azurestackhub.crt
 RUN update-ca-certificates
 
 # Register an Azure Resource Manager environment that targets your Azure Stack Hub instance. Get your Azure Resource Manager endpoint value from your service provider.
