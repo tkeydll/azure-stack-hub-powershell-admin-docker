@@ -21,7 +21,7 @@ stages:
 build_job:
   stage: build
   script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG . --build-arg ca_cert_url=$CA_CERT_URL --buld-arg endpoint_resource_manager=$ENDPOINT_RESOURCE_MANAGER --build-arg suffix_keyvault_dns=$SUFFIX_KEYVAULT_DNS --build-arg tenant_name=$TENANT_NAME --build-arg tenant_id=$TENANT_ID
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG . --build-arg ca_cert_url=$CA_CERT_URL --build-arg endpoint_resource_manager=$ENDPOINT_RESOURCE_MANAGER --build-arg suffix_keyvault_dns=$SUFFIX_KEYVAULT_DNS --build-arg tenant_name=$TENANT_NAME --build-arg tenant_id=$TENANT_ID
     - docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
 
 notify_job:
