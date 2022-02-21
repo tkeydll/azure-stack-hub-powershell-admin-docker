@@ -1,0 +1,35 @@
+image: docker:19.03-dind
+
+services:
+  - docker:19.03-dind
+    # If you use insecure registry, enable below.
+    # command: ["--insecure-registry", "your.registry:port"]
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_TLS_CERTDIR: ""
+  HTTPS_PROXY: $HTTPS_PROXY
+  IMAGE_NAME: tkeydll/azure-stack-hub-powershell-admin-docker
+  IMAGE_TAG:
+  # If you use insecure registry, enable below.
+  # INSECURE_REGISTRY: $REGISTRY
+
+stages:
+  - build
+  - notify
+
+build_job:
+  stage: build
+  script:
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG . --build-arg ca_cert_url=$CA_CERT_URL --buld-arg endpoint_resource_manager=$ENDPOINT_RESOURCE_MANAGER --build-arg suffix_keyvault_dns=$SUFFIX_KEYVAULT_DNS --build-arg tenant_name=$TENANT_NAME --build-arg tenant_id=$TENANT_ID
+    - docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+
+notify_job:
+  stage: notify
+  variables:
+    NOTIFY_DATA: '{"@type": "MessageCard", "themeColor": "0072C6", "title": "azure-stack-hub-powershell-admin-docker is updated.", "text": "http://$REGISTRY/tag/$IMAGE_NAME/$CLI_VERSION/"}'
+  script:
+    - export HTTP_PROXY=$HTTPS_PROXY
+    - export HTTPS_PROXY=$HTTPS_PROXY
+    - apk add --no-cache curl
+    - 'curl -X POST -H "Content-Type: application/json" --data "${NOTIFY_DATA}" $NOTIFY_URL'
