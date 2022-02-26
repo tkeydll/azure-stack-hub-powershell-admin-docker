@@ -1,16 +1,16 @@
 image: docker:19.03-dind
 
 services:
-  - docker:19.03-dind
-    # If you use insecure registry, enable below.
-    # command: ["--insecure-registry", "your.registry:port"]
+  - name: docker:19.03-dind
+    command: ["--insecure-registry", "10.124.96.119:5000"]
+
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_TLS_CERTDIR: ""
-  HTTPS_PROXY: $HTTPS_PROXY
+  #HTTPS_PROXY: $HTTPS_PROXY
   IMAGE_NAME: tkeydll/azure-stack-hub-powershell-admin-docker
-  IMAGE_TAG:
+  IMAGE_TAG: latest
   # If you use insecure registry, enable below.
   # INSECURE_REGISTRY: $REGISTRY
 
@@ -21,8 +21,8 @@ stages:
 build_job:
   stage: build
   script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG . --build-arg ca_cert_url=$CA_CERT_URL --build-arg endpoint_resource_manager=$ENDPOINT_RESOURCE_MANAGER --build-arg suffix_keyvault_dns=$SUFFIX_KEYVAULT_DNS --build-arg tenant_name=$TENANT_NAME --build-arg tenant_id=$TENANT_ID
-    - docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+    - docker build -t $REGISTRY_URL:$REGISTRY_PORT/$IMAGE_NAME:$IMAGE_TAG . --build-arg ca_cert_url=$CA_CERT_URL --build-arg endpoint_resource_manager=$ENDPOINT_RESOURCE_MANAGER --build-arg suffix_keyvault_dns=$SUFFIX_KEYVAULT_DNS --build-arg tenant_name=$TENANT_NAME
+    - docker push $REGISTRY_URL:$REGISTRY_PORT/$IMAGE_NAME:$IMAGE_TAG
 
 notify_job:
   stage: notify

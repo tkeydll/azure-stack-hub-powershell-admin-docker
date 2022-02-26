@@ -5,7 +5,7 @@ ARG environment_name=AzureStackAdmin
 ARG endpoint_resource_manager=https://adminmanagement.local.azurestack.external
 ARG suffix_keyvault_dns=.adminvault.local.azurestack.external
 ARG tenant_name=your_tenant_name
-ARG tenant_id
+#ARG tenant_id
 
 # Add cacert.
 WORKDIR /usr/local/share/ca-certificates
